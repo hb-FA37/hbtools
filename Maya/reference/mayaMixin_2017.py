@@ -1,10 +1,11 @@
-﻿#!/usr/bin/env python
+﻿# NOTE: copied from C:\Program Files\Autodesk\Maya2017\Python\Lib\site-packages\maya\app\general\mayaMixin.py as a reference.
+#!/usr/bin/env python
 """
 Maya mixin classes to add common functionality for custom PyQt/PySide widgets in Maya.
 
 * MayaQWidgetBaseMixin      Mixin that should be applied to all custom QWidgets created for Maya
                             to automatically handle setting the objectName and parenting
-                            
+
 * MayaQWidgetDockableMixin  Mixin that adds dockable capabilities within Maya controlled with
                             the show() function
 """
@@ -32,7 +33,7 @@ except ImportError, e1:
         from sip import wrapinstance as wrapInstance
         _qtImported = 'PyQt4'
     except ImportError, e2:
-        raise ImportError, '%s, %s'%(e1,e2)   
+        raise ImportError, '%s, %s'%(e1,e2)
 
 
 class MayaQWidgetBaseMixin(object):
@@ -43,11 +44,11 @@ class MayaQWidgetBaseMixin(object):
         * parenting the widget under the main maya window if no parent is explicitly
           specified so not to have the Window disappear when the instance variable
           goes out of scope
-    
+
     Integration Notes:
         Inheritance ordering: This class must be placed *BEFORE* the Qt class for proper execution
         This is needed to workaround a bug where PyQt/PySide does not call super() in its own __init__ functions
-    
+
     Example:
         class MyQWidget(MayaQWidgetBaseMixin, QPushButton):
             def __init__(self, parent=None):
@@ -65,7 +66,7 @@ class MayaQWidgetBaseMixin(object):
     def _initForMaya(self, parent=None, *args, **kwargs):
         '''
         Handle the auto-parenting and auto-naming.
-               
+
         :Parameters:
             parent (string)
                 Explicitly specify the QWidget parent.  If 'None', then automatically
@@ -110,15 +111,15 @@ class MayaQWidgetBaseMixin(object):
             parentName = origParent.objectName()
             if parentName and len(parentName) and cmds.workspaceControl(parentName, q=True, exists=True):
                 cmds.deleteUI(parentName, control=True)
-            
-            
+
+
 class MayaQDockWidget(MayaQWidgetBaseMixin,QDockWidget):
     '''QDockWidget tailored for use with Maya.
     Mimics the behavior performed by Maya's internal QMayaDockWidget class and the dockControl command
 
     :Signals:
         closeEventTriggered: emitted when a closeEvent occurs
-    
+
     :Known Issues:
         * Manually dragging the DockWidget to dock in the Main MayaWindow will have it resize to the 'sizeHint' size
           of the child widget() instead of preserving its existing size.
@@ -132,15 +133,15 @@ class MayaQDockWidget(MayaQWidgetBaseMixin,QDockWidget):
 
         # == Mimic operations performed by Maya internal QmayaDockWidget ==
         self.setAttribute(Qt.WA_MacAlwaysShowToolWindow)
-        
+
         # WORKAROUND: The mainWindow.handleDockWidgetVisChange may not be present on some PyQt and PySide systems.
         #             Handle case if it fails to connect to the attr.
         mainWindowPtr = omui.MQtUtil.mainWindow()
         mainWindow = wrapInstance(long(mainWindowPtr), QMainWindow)
         try:
             self.visibilityChanged.connect(mainWindow.handleDockWidgetVisChange)
-        except AttributeError, e: 
-            # Error connecting visibilityChanged trigger to mainWindow.handleDockWidgetVisChange. 
+        except AttributeError, e:
+            # Error connecting visibilityChanged trigger to mainWindow.handleDockWidgetVisChange.
             # Falling back to using MEL command directly.
             mel.eval('evalDeferred("updateEditorToggleCheckboxes()")')  # Currently mainWindow.handleDockWidgetVisChange only makes this updateEditorToggleCheckboxes call
 
@@ -197,11 +198,11 @@ class MayaQDockWidget(MayaQWidgetBaseMixin,QDockWidget):
 class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     '''
     Handle Maya dockable actions controlled with the show() function.
-    
+
     Integration Notes:
         Inheritance ordering: This class must be placed *BEFORE* the Qt class for proper execution
         This is needed to workaround a bug where PyQt/PySide does not call super() in its own __init__ functions
-    
+
     Example:
         class MyQWidget(MayaQWidgetDockableMixin, QPushButton):
             def __init__(self, parent=None):
@@ -221,7 +222,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     def setDockableParameters(self, dockable=None, floating=None, area=None, allowedArea=None, width=None, height=None, x=None, y=None, retain=True, plugins=None, controls=None, uiScript=None, closeCallback=None, *args, **kwargs):
         '''
         Set the dockable parameters.
-        
+
         :Parameters:
             dockable (bool)
                 Specify if the window is dockable (default=False)
@@ -241,7 +242,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
                 left edge of the window
             y (int)
                 top edge of the window
-                
+
         :See: show(), hide(), and setVisible()
         '''
         if ((dockable == True) or (dockable == None and self.isDockable())): # == Handle docked window ==
@@ -319,7 +320,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
                 # Hook up signals
                 #dockWidget.topLevelChanged.connect(self.floatingChanged)
                 #dockWidget.closeEventTriggered.connect(self.dockCloseEventTriggered)
-                
+
         else:  # == Handle Standalone Window ==
             # Make standalone as needed
             if not dockable and self.isDockable():
@@ -337,7 +338,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
                 currentVisibility = self.isVisible()
                 self._makeMayaStandaloneWindow() # Set the parent back to Maya and remove the parent dock widget
                 self.setVisible(currentVisibility)
-                
+
             # Handle position and sizing
             if (width != None) or (height != None):
                 if width == None:
@@ -354,7 +355,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
 
     def setSizeHint(self, size):
         '''
-        Virtual method used to pass the user settable width and height down to the widget whose 
+        Virtual method used to pass the user settable width and height down to the widget whose
         size policy controls the actual size most of the time.
         '''
         pass
@@ -362,16 +363,16 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     def show(self, *args, **kwargs):
         '''
         Show the QWidget window.  Overrides standard QWidget.show()
-        
+
         :See: setDockableParameters() for a list of parameters
         '''
         # Update the dockable parameters first (if supplied)
         if len(args) or len(kwargs):
             self.setDockableParameters(*args, **kwargs)
-        
+
         # Handle the standard setVisible() operation of show()
         QWidget.setVisible(self, True) # NOTE: Explicitly calling QWidget.setVisible() as using super() breaks in PySide: super(self.__class__, self).show()
-        
+
         # Handle special case if the parent is a QDockWidget (dockControl)
         parent = self.parent()
         if parent:
@@ -395,7 +396,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
 
     def close(self):
         '''Closes the widget. Overrides standard QWidget.close()
-        '''       
+        '''
         parent = self.parent()
         if parent:
             parentName = parent.objectName()
@@ -407,7 +408,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     def setVisible(self, makeVisible, *args, **kwargs):
         '''
         Show/hide the QWidget window.  Overrides standard QWidget.setVisible() to pass along additional arguments
-        
+
         :See: show() and hide()
         '''
         if (makeVisible == True):
@@ -433,7 +434,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
 
     def isDockable(self):
         '''Return if the widget is currently dockable (under a QDockWidget)
-        
+
         :Return: bool
         '''
         parent = self.parent()
@@ -449,7 +450,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     def isFloating(self):
         '''Return if the widget is currently floating (under a QDockWidget)
         Will return True if is a standalone window OR is a floating dockable window.
-        
+
         :Return: bool
         '''
         parent = self.parent()
@@ -479,7 +480,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     def dockArea(self):
         '''Return area if the widget is currently docked to the Maya MainWindow
         Will return None if not dockable
-        
+
         :Return: str
         '''
         dockControlQt = self.parent()
@@ -490,14 +491,14 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
             mainWindow = self.parent().parent() if isinstance(self.parent().parent(), QMainWindow) \
                 else wrapInstance(long(omui.MQtUtil.mainWindow()), QMainWindow)
 
-            dockAreaMap = {    
+            dockAreaMap = {
                 Qt.LeftDockWidgetArea   : 'left',
                 Qt.RightDockWidgetArea  : 'right',
                 Qt.TopDockWidgetArea    : 'top',
                 Qt.BottomDockWidgetArea : 'bottom',
                 Qt.AllDockWidgetAreas   : 'all',
                 Qt.NoDockWidgetArea     : 'none',   # Note: 'none' not supported in maya dockControl command
-            }    
+            }
             dockWidgetAreaBitmap = mainWindow.dockWidgetArea(dockControlQt)
             return dockAreaMap[dockWidgetAreaBitmap]
 
@@ -509,7 +510,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
         '''
         # Handle the standard setVisible() operation of show()
         QWidget.setWindowTitle(self, val) # NOTE: Explicitly calling QWidget.setWindowTitle() as using super() breaks in PySide: super(self.__class__, self).show()
-        
+
         # Handle special case if the parent is a QDockWidget (dockControl)
         parent = self.parent()
         if parent:
@@ -520,7 +521,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
     def showRepr(self):
         '''Present a string of the parameters used to reproduce the current state of the
         widget used in the show() command.
-        
+
         :Return: str
         '''
         reprDict = {}
@@ -539,7 +540,7 @@ class MayaQWidgetDockableMixin(MayaQWidgetBaseMixin):
         sz  = self.geometry().size()
         reprDict['width'] = sz.width()
         reprDict['height'] = sz.height()
-        
+
         # Construct the repr show() string
         reprShowList = ['%s=%r'%(k,v) for k,v in reprDict.items() if v != None]
         reprShowStr = 'show(%s)'%(', '.join(reprShowList))
