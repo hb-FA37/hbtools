@@ -18,12 +18,12 @@ def procrustes(X, Y, scaling=True, reflection='best'):
 
     Inputs:
     ------------
-    X, Y    
+    X, Y
         matrices of target and input coordinates. they must have equal
         numbers of  points (rows), but Y may have fewer dimensions
         (columns) than X.
 
-    scaling 
+    scaling
         if False, the scaling component of the transformation is forced
         to 1
 
@@ -35,14 +35,14 @@ def procrustes(X, Y, scaling=True, reflection='best'):
 
     Outputs
     ------------
-    d       
+    d
         the residual sum of squared errors, normalized according to a
         measure of the scale of X, ((X - X.mean(0))**2).sum()
 
     Z
         the matrix of transformed Y-values
 
-    tform    
+    tform
         a dict specifying the rotation, translation and scaling that
         maps X --> Y
 
@@ -111,7 +111,7 @@ def procrustes(X, Y, scaling=True, reflection='best'):
         T = T[:my,:]
     c = muX - b*np.dot(muY, T)
 
-    #transformation values 
+    #transformation values
     tform = {'rotation':T, 'scale':b, 'translation':c}
 
     return d, Z, tform
