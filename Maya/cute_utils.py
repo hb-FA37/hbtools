@@ -85,4 +85,6 @@ def _find_qobject(qobject, tree_elements):
         if qchild is None:
             continue
         return qchild
+    
+    return None
 
