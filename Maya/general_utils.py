@@ -61,3 +61,13 @@ def save_shelves():
     shelves = cmds.shelfTabLayout(top_level_shelf, query=True, childArray=True)
     for index, shelf in enumerate(shelves):
         cmds.optionVar(stringValue=('shelfName%d' % (index + 1), str(shelf)))
+        
+
+def delete_all_shelves():
+    top_level_shelf = mel.eval('$temp = $gShelfTopLevel')
+    shelves = cmds.shelfTabLayout(top_level_shelf, query=True, childArray=True)
+    if shelves is None:
+        return
+    for index, shelf in reversed(enumerate(shelves)):
+        cmds.optionVar(remove="shelfName"+str(index+1))
+        cmds.deleteUI(shelf)
