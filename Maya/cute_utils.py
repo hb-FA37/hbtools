@@ -23,25 +23,34 @@ def delete_window(object_name):
         cmds.deleteUI(object_name, wnd=True)
 
 
-def print_maya_qobject_tree():
+def print_maya_qobject_tree(print_file=None):
     """
     Prints the entire qobject tree for the Maya main window.
     This can take a while, these paths are to be used in combination 
     with get_qtobject_for_uipath method.
     Note: these paths are slightly different then the ones used by OpenMayaUI.MQtUtil.
     """
-    maya = get_maya_main_window()
-    _print_qobject_tree(maya, "")
+    maya = get_maya_main_window()    
+    if print_file:
+        file_ = open(print_file,"w+")
+        
+    _print_qobject_tree(maya, "", file_)
+    if print_file:
+        file_.close()
 
 
-def _print_qobject_tree(qobject, path):
+def _print_qobject_tree(qobject, path, file_=None):
     """ Prints in a depth first like fashion """
     name = qobject.objectName()
-    path = path + "|" + name     
-    print path   
-
+    path = path + "|" + name      
+    
+    if file_:
+        file_.write(path)
+    else:
+        print path
+        
     for child in qobject.children():
-        _print_qobject_tree(child, path)
+        _print_qobject_tree(child, path, file_=file_)
 
 
 def get_qtobject_for_uipath(pathstr):
