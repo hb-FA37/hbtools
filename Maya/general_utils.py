@@ -1,3 +1,5 @@
+import maya.cmds as cmds
+import maya.mel as cmds
 
 def install_packages(packages):
     # try:
@@ -22,6 +24,9 @@ def install_packages(packages):
         easy_install.main(packages)
     else:
         easy_install.main([packages])
+
+
+# Shelves #
 
 
 def load_default_shelves2016():
@@ -49,3 +54,10 @@ def _load_shelves(shelves):
             print e
     
     mel.eval('saveAllShelves $gShelfTopLevel;')
+
+
+def save_shelves():
+    top_level_shelf = mel.eval('$temp = $gShelfTopLevel')
+    shelves = cmds.shelfTabLayout(top_level_shelf, query=True, childArray=True)
+    for index, shelf in enumerate(shelves):
+        cmds.optionVar(stringValue=('shelfName%d' % (index + 1), str(shelf)))
