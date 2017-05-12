@@ -68,6 +68,6 @@ def delete_all_shelves():
     shelves = cmds.shelfTabLayout(top_level_shelf, query=True, childArray=True)
     if shelves is None:
         return
-    for index, shelf in reversed(enumerate(shelves)):
+    for index, shelf in reversed(list(enumerate(shelves))):
         cmds.optionVar(remove="shelfName"+str(index+1))
         cmds.deleteUI(shelf)
