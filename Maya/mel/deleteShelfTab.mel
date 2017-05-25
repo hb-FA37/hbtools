@@ -8,12 +8,12 @@
 // international treaties.
 //
 // The Data is provided for use exclusively by You. You have the right to use,
-// modify, and incorporate this Data into other products for purposes authorized 
+// modify, and incorporate this Data into other products for purposes authorized
 // by the Autodesk software license agreement, without fee.
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. AUTODESK
 // DOES NOT MAKE AND HEREBY DISCLAIMS ANY EXPRESS OR IMPLIED WARRANTIES
 // INCLUDING, BUT NOT LIMITED TO, THE WARRANTIES OF NON-INFRINGEMENT,
-// MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ARISING FROM A COURSE 
+// MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ARISING FROM A COURSE
 // OF DEALING, USAGE, OR TRADE PRACTICE. IN NO EVENT WILL AUTODESK AND/OR ITS
 // LICENSORS BE LIABLE FOR ANY LOST REVENUES, DATA, OR PROFITS, OR SPECIAL,
 // DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES, EVEN IF AUTODESK AND/OR ITS
@@ -28,7 +28,7 @@
 //<name deleteShelfTab>
 //
 //<synopsis>
-//		deleteShelfTab (string $shelfName) 
+//		deleteShelfTab (string $shelfName)
 //
 //<returns>
 //		int :	1 = shelf tab was deleted
@@ -47,15 +47,15 @@
 //
 //</doc>
 
-global proc int deleteShelfTab(string $shelfName) 
+global proc int deleteShelfTab(string $shelfName)
 {
 	int $returnStatus = 0;
-	
+
 	global string $gShelfForm;
 	global string $gShelfTopLevel;
 
 	setParent $gShelfTopLevel;
-	string $shelves[] = `tabLayout -q -ca $gShelfTopLevel`;	
+	string $shelves[] = `tabLayout -q -ca $gShelfTopLevel`;
 	int $numShelves = size($shelves);
 
 	int $indexArr[];
@@ -64,13 +64,13 @@ global proc int deleteShelfTab(string $shelfName)
 
 	// Bail if there is something really weird going on
 	if ($numShelves <= 0) return $returnStatus;
-	
+
 	// Check for the last shelf
 	string $ok		= (uiRes("m_deleteShelfTab.kOK"));
 	if (1 == $numShelves) {
-		confirmDialog -title (uiRes("m_deleteShelfTab.kAlert"))  
-			-button $ok 
-			-defaultButton $ok 
+		confirmDialog -title (uiRes("m_deleteShelfTab.kAlert"))
+			-button $ok
+			-defaultButton $ok
 			-message (uiRes("m_deleteShelfTab.kCannotDelete")) ;
 		return $returnStatus;
 	}
@@ -79,21 +79,21 @@ global proc int deleteShelfTab(string $shelfName)
 	if(!`exists shelfLabel_melToUI` ){
 		source "shelfLabel.mel";
 	}
-	
+
 	string $msg        = (uiRes("m_deleteShelfTab.kDeletionConfirmMsg"));
 	string $shelfLabel = `shelfLabel_melToUI $shelfName`;
-	string $dlgMsg     = `format -s $shelfLabel $msg`;  
+	string $dlgMsg     = `format -s $shelfLabel $msg`;
 	//string $cancel     = (uiRes("m_deleteShelfTab.kCancel"));
-	
-	//if ($cancel == `confirmDialog -title (uiRes("m_deleteShelfTab.kConfirm")) 
+
+	//if ($cancel == `confirmDialog -title (uiRes("m_deleteShelfTab.kConfirm"))
 	//	-message $dlgMsg	-button $ok  -button $cancel -defaultButton $ok
-	//	-cancelButton $cancel  -dismissString $cancel `) 
+	//	-cancelButton $cancel  -dismissString $cancel `)
 	//{
 	//	return $returnStatus;
 	//}
 
 	// Okay, now we can delete the shelf tab
-	
+
 	int $i = 0;
 	int $nShelves = 0;
 	int $shelfNum = 0;
@@ -110,7 +110,7 @@ global proc int deleteShelfTab(string $shelfName)
 		string $align = "left";
 		if ( `optionVar -ex ("shelfAlign" + ($i+1))` )
 			$align = `optionVar -q ("shelfAlign" + ($i+1))`;
-		optionVar 
+		optionVar
 			-iv ("shelfLoad" + $i) `optionVar -q ("shelfLoad" + ($i+1))`
 			-sv ("shelfName" + $i) `optionVar -q ("shelfName" + ($i+1))`
 			-sv ("shelfAlign" + $i) $align
@@ -127,7 +127,7 @@ global proc int deleteShelfTab(string $shelfName)
 	// the shelfTabChange() method triggered. See Maya-3288.
 	//
 	deleteUI -layout ($gShelfTopLevel + "|" + $shelfName);
-	
+
 	string $shelfDirs = `internalVar -userShelfDir`;
 	string $shelfArray[];
 	string $PATH_SEPARATOR = `about -win`? ";" : ":";
@@ -141,17 +141,17 @@ global proc int deleteShelfTab(string $shelfName)
 		if (`filetest -r $deletedFileName`) {
 			sysFile -delete $deletedFileName;
 		}
-	
+
 		if (`file -q -exists $fileName`) {
 			sysFile -rename $deletedFileName $fileName;
 			break;
 		}
 	}
-	
+
 	//  Make sure the new active shelf tab has buttons.
 	shelfTabChange();
-				
+
 	$returnStatus = 1;
-	
+
 	return $returnStatus;
 }
