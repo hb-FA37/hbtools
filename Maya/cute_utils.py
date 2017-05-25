@@ -1,11 +1,13 @@
-from Qt import QtWidgets
+from Qt import QtWidgets, QtCore
 from maya import cmds
 from maya import OpenMayaUI as omui
 
 
 def get_maya_main_window():
     """ Returns the QWidget-object of the main maya application. """
-    for obj in QtWidgets.qApp.topLevelWidgets():
+    # for obj in QtWidgets.qApp.topLevelWidgets():
+    # qApp is a macro which is equivalent too the line below.
+    for obj in QtCore.QCoreApplication.instance().topLevelWidgets():
         if obj.objectName() == 'MayaWindow':
             return obj
     raise RuntimeError('Could not find MayaWindow instance')
