@@ -560,30 +560,30 @@ class AccordionWidget(QScrollArea):
     pyBoxedMode = Property('bool', isBoxedMode, setBoxedMode)
 
 
-_gUI = None
-from Qt.QtWidgets import QDialog, QVBoxLayout, QFrame, QPushButton
+# _gUI = None
+# from Qt.QtWidgets import QDialog, QVBoxLayout, QFrame, QPushButton
 
-class Sample(QDialog):
-    def __init__(self, parent=None):
-        super(Sample, self).__init__(parent)
-        self.setLayout(QVBoxLayout())
-        self.accWidget = AccordionWidget(self)
-        self.accWidget.addItem("A", self.buildFrame())
-        self.accWidget.addItem("B", self.buildFrame())
-        self.accWidget.setRolloutStyle(self.accWidget.Maya)
-        self.accWidget.setSpacing(0)  # More like Maya but I like some padding.
-        self.layout().addWidget(self.accWidget)
+# class Sample(QDialog):
+#     def __init__(self, parent=None):
+#         super(Sample, self).__init__(parent)
+#         self.setLayout(QVBoxLayout())
+#         self.accWidget = AccordionWidget(self)
+#         self.accWidget.addItem("A", self.buildFrame())
+#         self.accWidget.addItem("B", self.buildFrame())
+#         self.accWidget.setRolloutStyle(self.accWidget.Maya)
+#         self.accWidget.setSpacing(0)  # More like Maya but I like some padding.
+#         self.layout().addWidget(self.accWidget)
 
-    def buildFrame(self):
-        someFrame = QFrame(self)
-        someFrame.setLayout(QVBoxLayout())
-        someFrame.layout().addWidget(QPushButton("Test"))
-        return someFrame
+#     def buildFrame(self):
+#         someFrame = QFrame(self)
+#         someFrame.setLayout(QVBoxLayout())
+#         someFrame.layout().addWidget(QPushButton("Test"))
+#         return someFrame
 
-    @classmethod
-    def display(cls):
-        """Demo Display method for Maya"""
-        global _gUI
-        _gUI = cls()
-        _gUI.show()
+#     @classmethod
+#     def display(cls):
+#         """Demo Display method for Maya"""
+#         global _gUI
+#         _gUI = cls()
+#         _gUI.show()
 
