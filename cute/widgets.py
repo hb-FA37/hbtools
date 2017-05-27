@@ -3,6 +3,8 @@ Basic widgets that have some setup
 """
 
 from Qt import QtWidgets, QtCore
+from slider_widget import *
+from accordion_widget import *
 
 
 class Widget37(QtWidgets.QWidget):
