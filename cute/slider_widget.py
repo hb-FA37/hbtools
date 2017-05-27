@@ -85,11 +85,6 @@ class FloatSliderWidget(BaseSliderWidget):
     DEFAULT_MAX_VALUE = 1.0
     SLIDER_TICKS = 5000  # Granularity.
 
-    def __init__(self, title=None, min_value=None, max_value=None, start_value=None, is_horizontal=False,
-                 spacing=4, margins=QtCore.QMargins(1, 1, 1, 1), parent=None):
-        super(FloatSliderWidget, self).__init__(title=title, min_value=min_value, max_value=max_value, start_value=start_value, is_horizontal=is_horizontal,
-                                                spacing=4, margins=QtCore.QMargins(1, 1, 1, 1), parent=parent)
-
     # Implemented #
 
     def get_value(self):
@@ -143,11 +138,6 @@ class IntegerSliderWidget(BaseSliderWidget):
 
     DEFAULT_MIN_VALUE = 0
     DEFAULT_MAX_VALUE = 100
-
-    def __init__(self, title=None, min_value=None, max_value=None, start_value=None, is_horizontal=False,
-                 spacing=4, margins=QtCore.QMargins(1, 1, 1, 1), parent=None):
-        super(IntegerSliderWidget, self).__init__(title=title, min_value=min_value, max_value=max_value, start_value=start_value, is_horizontal=is_horizontal,
-                                                  spacing=4, margins=QtCore.QMargins(1, 1, 1, 1), parent=parent)
 
     # Implemented #
 
