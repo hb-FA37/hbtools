@@ -49,6 +49,10 @@ class BaseSliderWidget(QtWidgets.QWidget):
         self._text.textChanged.connect(self._on_text_changed)
         self._slider.valueChanged.connect(self._on_slider_changed)
 
+        self.layout().setStretch(0, 1)
+        self.layout().setStretch(1, 1)
+        self.layout().setStretch(2, 2)
+
     def set_value(self, value):
         self._text.setText(str(value))
 
@@ -107,6 +111,9 @@ class FloatSliderWidget(BaseSliderWidget):
             self._slider.setValue(slider_value)
 
     def _on_text_changed(self):
+        if self._text.text() == "":
+            return
+
         value = float(self._text.text())
         self._slider.valueChanged.disconnect(self._on_slider_changed)
 
@@ -162,6 +169,9 @@ class IntegerSliderWidget(BaseSliderWidget):
             self._slider.setValue(start_value)
 
     def _on_text_changed(self):
+        if self._text.text() == "":
+            return
+
         value = int(self._text.text())
         self._sliders.valueChanged.disconnect(self._on_slider_changed)
 
