@@ -5,7 +5,6 @@ class BaseSliderWidget(QtWidgets.QWidget):
     """ A custom slider that bidirectionally connects a text field and a slider. """
     DEFAULT_MIN_VALUE = -1
     DEFAULT_MAX_VALUE = -1
-    signal_value_changed = QtCore.Signal()
 
     def __init__(self, title=None, min_value=None, max_value=None, start_value=None, is_horizontal=False,
                  spacing=4, margins=QtCore.QMargins(1, 1, 1, 1), parent=None):
@@ -85,6 +84,8 @@ class FloatSliderWidget(BaseSliderWidget):
     DEFAULT_MAX_VALUE = 1.0
     SLIDER_TICKS = 5000  # Granularity.
 
+    signal_value_changed = QtCore.Signal(float)
+
     # Implemented #
 
     def get_value(self):
@@ -117,7 +118,7 @@ class FloatSliderWidget(BaseSliderWidget):
         slider_value = (value - self._min_value) * self.SLIDER_TICKS / (self._max_value - self._min_value)
         self._slider.setValue(slider_value)
         self._slider.valueChanged.connect(self._on_slider_changed)
-        self.signal_value_changed.emit()
+        self.signal_value_changed.emit(value)
 
     def _on_slider_changed(self):
         value = float(self._slider.value())
@@ -125,7 +126,7 @@ class FloatSliderWidget(BaseSliderWidget):
         text_value = self._slider_value_to_text_value(value)
         self._text.setText(str(text_value))
         self._text.textChanged.connect(self._on_text_changed)
-        self.signal_value_changed.emit()
+        self.signal_value_changed.emit(text_value)
 
     # Other #
 
@@ -138,6 +139,8 @@ class IntegerSliderWidget(BaseSliderWidget):
 
     DEFAULT_MIN_VALUE = 0
     DEFAULT_MAX_VALUE = 100
+
+    signal_value_changed = QtCore.Signal(int)
 
     # Implemented #
 
@@ -169,9 +172,11 @@ class IntegerSliderWidget(BaseSliderWidget):
 
         self._sliders.setValue(value)
         self._sliders.valueChanged.connect(self._on_slider_changed)
+        self.signal_value_changed.emit(value)
 
     def _on_slider_changed(self):
         value = int(self._sliders.value())
         self._text.textChanged.disconnect(self._on_text_changed)
         self._text.setText(str(value))
         self._text.textChanged.connect(self._on_text_changed)
+        self.signal_value_changed.emit(value)
