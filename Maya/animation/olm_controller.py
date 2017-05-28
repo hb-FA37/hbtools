@@ -3,7 +3,7 @@ import json
 import maya.cmds as cmds
 import maya.mel as mel
 
-from Tools37.Maya.animation.olm_view import OlmWidget
+from Tools37.maya.animation.olm_view import OlmWidget
 from Qt import QtWidgets, QtCore
 
 

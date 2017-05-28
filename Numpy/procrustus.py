@@ -3,7 +3,8 @@ Source: http://stackoverflow.com/questions/18925181/procrustes-analysis-with-num
 For personal use only.
 """
 
-import numpy
+import numpy as np
+
 
 def procrustes(X, Y, scaling=True, reflection='best'):
     """

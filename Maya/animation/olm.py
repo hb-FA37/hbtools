@@ -1,5 +1,5 @@
-from Tools37.Maya.animation.olm_controller import OlmController
-from Tools37.Maya.cute_utils import get_maya_main_window
+from Tools37.maya.animation.olm_controller import OlmController
+from Tools37.maya.cute_utils import get_maya_main_window
 from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
 
