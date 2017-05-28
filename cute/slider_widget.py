@@ -6,7 +6,7 @@ class BaseSliderWidget(QtWidgets.QWidget):
     DEFAULT_MIN_VALUE = -1
     DEFAULT_MAX_VALUE = -1
 
-    def __init__(self, title=None, min_value=None, max_value=None, start_value=None, is_horizontal=False,
+    def __init__(self, title=None, min_value=None, max_value=None, start_value=None, is_horizontal=True,
                  spacing=4, margins=QtCore.QMargins(1, 1, 1, 1), parent=None):
         QtWidgets.QWidget.__init__(self, parent)
         self._slider = None
