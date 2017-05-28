@@ -9,7 +9,7 @@ Modification of Blur's Accordion Widget to include a Maya style.  Also got rid o
 from Qt.QtCore import Qt, QRect, QMimeData, QEvent, QPoint, Signal, Property
 from Qt.QtGui import QCursor, QColor, QPolygon, QBrush
 from Qt.QtGui import QDrag, QPixmap, QPainter, QPalette, QPen
-from Qt.QtWidgets import QWidget, QScrollArea, QGroupBox, QApplication
+from Qt.QtWidgets import QWidget, QScrollArea, QGroupBox, QApplication, QVBoxLayout
 
 
 class AccordionItem(QGroupBox):
