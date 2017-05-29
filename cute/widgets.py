@@ -7,7 +7,7 @@ from slider_widget import *
 from accordion_widget import *
 
 
-class MayaWidget37(Widget37):
+class MayaWidget37(QtWidgets.QWidget):
     def __init__(self, center=True, parent=None):
         super(MayaWidget37, self).__init__(parent=parent)
         self._init_widget()
