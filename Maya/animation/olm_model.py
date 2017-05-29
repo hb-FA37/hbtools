@@ -168,6 +168,9 @@ class VertexModel(QtCore.QAbstractTableModel):
         self._control_sphere_list.append(self._create_control_sphere(vertex_index))
         self.endInsertRows()
 
+    def get_vertex_indices(self):
+        return sorted(self._vertex_list)
+
     # Spheres #
 
     def _create_vertex_sphere(self, vertex_index):
