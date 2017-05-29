@@ -4,11 +4,7 @@ from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
 
 class OlmMixinController(MayaQWidgetDockableMixin, OlmController):
-    """ MayaMixin wrapper around the main view, allows it to be dockable.
-    We use the 2016v2 version as the 2017 version works with workspace controls which breaks alot of
-    qt signals and has some issues in my opinion. For example, you cannot intercept the closeEvent anymore.
-    Will be removed once they fix Mixin2017 or when I understand it better.
-    """
+    """ MayaMixin wrapper around the main view, allows it to be dockable. """
     pass
 
 
