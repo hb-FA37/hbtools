@@ -47,7 +47,7 @@
 //
 //</doc>
 
-global proc int deleteShelfTab(string $shelfName)
+global proc int deleteShelfTab37(string $shelfName)
 {
 	int $returnStatus = 0;
 
