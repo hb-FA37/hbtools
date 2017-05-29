@@ -7,14 +7,15 @@ from slider_widget import *
 from accordion_widget import *
 
 
-class Widget37(QtWidgets.QWidget):
+class MayaWidget37(Widget37):
     def __init__(self, center=True, parent=None):
-        super(Widget37, self).__init__(parent=parent)
+        super(MayaWidget37, self).__init__(parent=parent)
         self._init_widget()
         if center:
             self._center_in_parent()
 
     def _init_widget(self):
+        self._delete_existing()
         self.setObjectName(self._get_object_name())
         self.setWindowTitle(self._get_window_title())
 
@@ -37,12 +38,6 @@ class Widget37(QtWidgets.QWidget):
 
         self.move(QtCore.QPoint(parent_center_x - self.width() / 2,
                                 parent_center_y - self.height() / 2))
-
-
-class MayaWidget37(Widget37):
-    def _init_widget(self):
-        self._delete_existing()
-        super(MayaWidget37, self)._init_widget()
 
     def _delete_existing(self):
         import maya.cmds as cmds
