@@ -1,5 +1,7 @@
+import os
 import maya.cmds as cmds
 import maya.mel as mel
+
 
 def install_packages(packages):
     # try:
@@ -57,6 +59,7 @@ def _load_shelves(shelves):
 
 
 def save_shelves():
+    """ Save the current shelf layour to the preferences. """
     top_level_shelf = mel.eval('$temp = $gShelfTopLevel')
     shelves = cmds.shelfTabLayout(top_level_shelf, query=True, childArray=True)
     for index, shelf in enumerate(shelves):
@@ -64,10 +67,15 @@ def save_shelves():
 
 
 def delete_all_shelves():
+    """ Deletes all the shelves. """
     top_level_shelf = mel.eval('$temp = $gShelfTopLevel')
     shelves = cmds.shelfTabLayout(top_level_shelf, query=True, childArray=True)
     if shelves is None:
         return
+
+    import Tools37.maya.mel as mel37
+    mel_file37 = os.path.join(os.path.dirname(mel37.__file__), "deleteShelfTab37.mel")
+    mel.eval('source "{}}"'.format(mel_file37))
+
     for _, shelf in reversed(list(enumerate(shelves))):
-        # TODO; replace with own implementation 37.
-        mel.eval('deleteShelfTab "{}"'.format(shelf))
+        mel.eval('deleteShelfTab37 "{}"'.format(shelf))
