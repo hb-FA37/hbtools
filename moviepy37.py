@@ -34,7 +34,7 @@ def cutit(movie_file, output_files, time_stamps):
         end = time_stamps[i * 2 + 1]
         print "Cutting from {} to {}".format(start, end)
         sub_clip = clip.subclip(start, end)
-        sub_clips.append(clip)
+        sub_clips.append(sub_clip)
 
     combined_clip = editor.concatenate_videoclips(sub_clips)
     combined_clip.write_videofile(output_files, preset="slower", threads=12)
