@@ -21,7 +21,7 @@ class VertexModel(QtCore.QAbstractTableModel):
         self._vertex_list = []              # Vertex Index
         self._vertex_sphere_list = []       # Original Vertex Sphere
         self._control_sphere_list = []      # Controlled Vertex Sphere
-        self._maya_group = cmds.group(name=_MAYA_GROUP)
+        self._maya_group = cmds.group(name=self._MAYA_GROUP)
 
         self._vertex_sphere_size = self._SPHERE_DEF_SIZE
         self._vertex_shader_node = None            # Vertex Sphere Shader Node
