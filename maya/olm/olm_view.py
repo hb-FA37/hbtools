@@ -59,7 +59,7 @@ class OlmWidget(MayaWidget37):
         widget, self._blendshape_combox, self._set_button = self._create_blendshape_widget()
         accordion.addItem("Blendshape", widget)
 
-        widget, self._table_model = self._create_vertex_widget()
+        widget, self._table_view, self._table_model = self._create_vertex_widget()
         accordion.addItem("Vertex Controllers", widget)
 
         widget = self._create_sphere_widget()
@@ -137,7 +137,7 @@ class OlmWidget(MayaWidget37):
         widget = QtWidgets.QWidget()
         widget.setLayout(layout)
 
-        return widget, table_model
+        return widget, table_view, table_model
 
     def _create_sphere_widget(self):
         layout = QtWidgets.QVBoxLayout()
