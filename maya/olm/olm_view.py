@@ -22,6 +22,8 @@ class OlmWidget(MayaWidget37):
     signal_import_selection = QtCore.Signal()
     signal_export_selection = QtCore.Signal()
 
+    signal_calculate = QtCore.Signal()
+
     signal_vertex_sphere_size = QtCore.Signal(float)
     signal_control_sphere_size = QtCore.Signal(float)
 
@@ -63,8 +65,11 @@ class OlmWidget(MayaWidget37):
         widget = self._create_sphere_widget()
         accordion.addItem("Sphere Options", widget)
 
+        widget = self._create_simulation_widget()
+        accordion.addItem("Simulation", widget)
+
         widget = self._create_import_export_widget()
-        accordion.addItem("Import|Export", widget)
+        accordion.addItem("Import | Export", widget)
 
     def _create_blendshape_widget(self):
         grid_layout = QtWidgets.QGridLayout()
@@ -148,6 +153,12 @@ class OlmWidget(MayaWidget37):
         widget = QtWidgets.QWidget()
         widget.setLayout(layout)
         return widget
+
+    def _create_simulation_widget(self):
+        # TODO; expand with more options (Constant evaluation, method)
+        button = QtWidgets.QPushButton("Calculate")
+        button.clicked.connect(self.signal_calculate.emit)
+        return button
 
     def _create_import_export_widget(self):
         layout = QtWidgets.QVBoxLayout()
