@@ -10,16 +10,18 @@ class VertexModel(QtCore.QAbstractTableModel):
     _MODEL_KEY = "vobject"
     _VERTEX_KEY = "vindex"
     _HEADERS = ["Name", "Vertex"]
+    _MAYA_GROUP = "OlmGroup"
 
     def __init__(self, parent=None):
         QtCore.QAbstractTableModel.__init__(self, parent)
         self._blendshape = None             # Blendshape Name
         self._output_geometry = None        # Output Mesh Name
 
-        self._name_list = []                # Custon Names
+        self._name_list = []                # Custom names
         self._vertex_list = []              # Vertex Index
         self._vertex_sphere_list = []       # Original Vertex Sphere
         self._control_sphere_list = []      # Controlled Vertex Sphere
+        self._maya_group = cmds.group(name=_MAYA_GROUP)
 
         self._vertex_sphere_size = self._SPHERE_DEF_SIZE
         self._vertex_shader_node = None            # Vertex Sphere Shader Node
@@ -161,11 +163,14 @@ class VertexModel(QtCore.QAbstractTableModel):
         return False
 
     def add_row(self, vertex_index, name):
-        self.beginInsertRows(QtCore.QModelIndex(), len(self._name_list), len(self._name_list))
+        self.beginInsertRows(QtCore.QModelIndex(), len(
+            self._name_list), len(self._name_list))
         self._vertex_list.append(vertex_index)
         self._name_list.append(name)
-        self._vertex_sphere_list.append(self._create_vertex_sphere(vertex_index))
-        self._control_sphere_list.append(self._create_control_sphere(vertex_index))
+        self._vertex_sphere_list.append(
+            self._create_vertex_sphere(vertex_index))
+        self._control_sphere_list.append(
+            self._create_control_sphere(vertex_index))
         self.endInsertRows()
 
     def get_vertex_indices(self):
@@ -176,21 +181,30 @@ class VertexModel(QtCore.QAbstractTableModel):
     def _create_vertex_sphere(self, vertex_index):
         name = "olm_VSphere_{}".format(vertex_index)
         sphere = cmds.polySphere(name=name, radius=1.0)
-        cmds.scale(self._vertex_sphere_size, self._vertex_sphere_size, self._vertex_sphere_size, sphere)
+        cmds.scale(self._vertex_sphere_size, self._vertex_sphere_size,
+                   self._vertex_sphere_size, sphere)
+
+        cmds.select(sphere)
+        cmds.group(sphere, self._maya_group)
 
         cmds.select(sphere)
         cmds.hyperShade(assign=self._vertex_shader_node)
 
         cmds.select(self._output_geometry + ".vtx[" + vertex_index + "]")
         cmds.select(sphere, add=True)
-        mel.eval('doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
+        mel.eval(
+            'doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
 
         return sphere
 
     def _create_control_sphere(self, vertex_index):
         name = "olm_CSphere_{}".format(vertex_index)
         sphere = cmds.polySphere(name=name, radius=1.0)
-        cmds.scale(self._control_sphere_size, self._control_sphere_size, self._control_sphere_size, sphere)
+        cmds.scale(self._control_sphere_size, self._control_sphere_size,
+                   self._control_sphere_size, sphere)
+
+        cmds.select(sphere)
+        cmds.group(sphere, self._maya_group)
 
         cmds.select(sphere)
         cmds.hyperShade(assign=self._control_shader_node)
@@ -201,20 +215,29 @@ class VertexModel(QtCore.QAbstractTableModel):
 
         cmds.select(self._output_geometry + ".vtx[" + vertex_index + "]")
         cmds.select(group, add=True)
-        mel.eval('doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
+        mel.eval(
+            'doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
 
         return sphere, group
 
     def _setup_sphere_shaders(self):
-        self._vertex_shader_node = cmds.shadingNode("phong", asShader=True, name="VertexSphereColor")
-        cmds.setAttr(self._vertex_shader_node + ".color", 0, 0, 1, type="double3")  # Blue
-        self._selected_vertex_shader_node = cmds.shadingNode("phong", asShader=True, name="VertexSphereColorSelected")
-        cmds.setAttr(self._selected_vertex_shader_node + ".color", 0, 1, 0, type="double3")  # Green
+        self._vertex_shader_node = cmds.shadingNode(
+            "phong", asShader=True, name="VertexSphereColor")
+        cmds.setAttr(self._vertex_shader_node + ".color",
+                     0, 0, 1, type="double3")  # Blue
+        self._selected_vertex_shader_node = cmds.shadingNode(
+            "phong", asShader=True, name="VertexSphereColorSelected")
+        cmds.setAttr(self._selected_vertex_shader_node +
+                     ".color", 0, 1, 0, type="double3")  # Green
 
-        self._control_shader_node = cmds.shadingNode("phong", asShader=True, name="ControlSphereColor")
-        cmds.setAttr(self._control_shader_node + ".color", 1, 0, 0, type="double3")  # Red
-        self._selected_control_shader_node = cmds.shadingNode("phong", asShader=True, name="ControlSphereColorSelected")
-        cmds.setAttr(self._selected_control_shader_node + ".color", 1, 1, 0, type="double3")  # Yellow
+        self._control_shader_node = cmds.shadingNode(
+            "phong", asShader=True, name="ControlSphereColor")
+        cmds.setAttr(self._control_shader_node + ".color",
+                     1, 0, 0, type="double3")  # Red
+        self._selected_control_shader_node = cmds.shadingNode(
+            "phong", asShader=True, name="ControlSphereColorSelected")
+        cmds.setAttr(self._selected_control_shader_node +
+                     ".color", 1, 1, 0, type="double3")  # Yellow
 
     def highlight(self, index):
         if not index < 0:
@@ -253,7 +276,8 @@ class VertexModel(QtCore.QAbstractTableModel):
     # Import / Export #
 
     def load_json(self, data):
-        # TODO; error checkingm, see if blendshape, outputGeometry and vertices exist.`
+        # TODO; error checkingm, see if blendshape, outputGeometry and vertices
+        # exist.`
         self._blendshape = data["blendshape"]
         self._output_geometry = data["outputGeometry"]
         for the_tuple in data["vertexList"]:
