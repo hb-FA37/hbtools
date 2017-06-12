@@ -5,7 +5,7 @@ import maya.mel as mel
 from Qt import QtWidgets, QtCore
 from Tools37.cute.widgets import MayaWidget37, AccordionWidget, FloatSliderWidget
 from Tools37.maya import cute_utils as cu
-from Tools37.maya.animation.olm_model import VertexModel
+from Tools37.maya.olm.olm_model import VertexModel
 
 
 class OlmWidget(MayaWidget37):
@@ -43,7 +43,7 @@ class OlmWidget(MayaWidget37):
 
     def _init(self, stay_top):
         self.setWindowTitle(self._TITLE)
-        self.setFixedWidth(self._WIDTH)
+        # self.setFixedWidth(self._WIDTH)  # TODO; fix in mixin init.
         if stay_top:
             self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 

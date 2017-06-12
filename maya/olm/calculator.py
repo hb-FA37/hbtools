@@ -6,7 +6,7 @@ import maya.cmds as cmds
 import numpy as np
 import scipy.optimize as sp
 import Tools37.maya.mesh_utils as mu
-import Tools37.maya.animation.maya2numpy as m2n
+import Tools37.maya.maya2numpy as m2n
 
 
 class BlendshapeCalculator(object):
