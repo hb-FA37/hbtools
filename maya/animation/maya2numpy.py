@@ -9,7 +9,15 @@ Collection of methods to gather Maya data into Numpy structures.
 
 
 def get_blendshape_mat(bs_node_name, indices=None, include_z=True, apply_vertex_weight_map=True):
-    """ A mat of a blendshape node, only collects the vertices that are in indices or all """
+    """ A mat of a blendshape node, only collects the vertices that are in indices or all
+    Returns a mat of the form:
+    X X X...
+    Y Y Y
+    Z Z Z
+    X X X
+    Y Y Y
+    ...
+    """
     bs_node_obj = OpenMaya.MObject()
     sel = OpenMaya.MSelectionList()
     sel.add(bs_node_name, 0)
