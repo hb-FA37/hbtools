@@ -17,11 +17,11 @@ class VertexModel(QtCore.QAbstractTableModel):
         self._blendshape = None             # Blendshape Name
         self._output_geometry = None        # Output Mesh Name
 
-        self._name_list = []                # Custom names
-        self._vertex_list = []              # Vertex Index
-        self._vertex_sphere_list = []       # Original Vertex Sphere
-        self._control_sphere_list = []      # Controlled Vertex Sphere
-        self._maya_group = cmds.group(name=self._MAYA_GROUP)
+        self._name_list = []                # Custom Names
+        self._vertex_list = []              # Vertex Indices
+        self._vertex_sphere_list = []       # Original Vertex Sphere - [sphere, sphere,..]
+        self._control_sphere_list = []      # Controlled Vertex Sphere - [[sphere, group],..]
+        self._maya_group = cmds.group(name=self._MAYA_GROUP, empty=True)
 
         self._vertex_sphere_size = self._SPHERE_DEF_SIZE
         self._vertex_shader_node = None            # Vertex Sphere Shader Node
@@ -163,14 +163,11 @@ class VertexModel(QtCore.QAbstractTableModel):
         return False
 
     def add_row(self, vertex_index, name):
-        self.beginInsertRows(QtCore.QModelIndex(), len(
-            self._name_list), len(self._name_list))
+        self.beginInsertRows(QtCore.QModelIndex(), len(self._name_list), len(self._name_list))
         self._vertex_list.append(vertex_index)
         self._name_list.append(name)
-        self._vertex_sphere_list.append(
-            self._create_vertex_sphere(vertex_index))
-        self._control_sphere_list.append(
-            self._create_control_sphere(vertex_index))
+        self._vertex_sphere_list.append(self._create_vertex_sphere(vertex_index))
+        self._control_sphere_list.append(self._create_control_sphere(vertex_index))
         self.endInsertRows()
 
     def get_vertex_indices(self):
@@ -184,16 +181,14 @@ class VertexModel(QtCore.QAbstractTableModel):
         cmds.scale(self._vertex_sphere_size, self._vertex_sphere_size,
                    self._vertex_sphere_size, sphere)
 
-        cmds.select(sphere)
-        cmds.group(sphere, self._maya_group)
+        cmds.parent(sphere, self._maya_group)
 
         cmds.select(sphere)
         cmds.hyperShade(assign=self._vertex_shader_node)
 
         cmds.select(self._output_geometry + ".vtx[" + vertex_index + "]")
         cmds.select(sphere, add=True)
-        mel.eval(
-            'doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
+        mel.eval('doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
 
         return sphere
 
@@ -203,8 +198,7 @@ class VertexModel(QtCore.QAbstractTableModel):
         cmds.scale(self._control_sphere_size, self._control_sphere_size,
                    self._control_sphere_size, sphere)
 
-        cmds.select(sphere)
-        cmds.group(sphere, self._maya_group)
+        cmds.parent(sphere, self._maya_group)
 
         cmds.select(sphere)
         cmds.hyperShade(assign=self._control_shader_node)
@@ -215,8 +209,7 @@ class VertexModel(QtCore.QAbstractTableModel):
 
         cmds.select(self._output_geometry + ".vtx[" + vertex_index + "]")
         cmds.select(group, add=True)
-        mel.eval(
-            'doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
+        mel.eval('doCreatePointOnPolyConstraintArgList 1 { "0","0","0","1","","1" };')
 
         return sphere, group
 
@@ -256,6 +249,8 @@ class VertexModel(QtCore.QAbstractTableModel):
             cmds.select(self._control_sphere_list[index][0])
             cmds.hyperShade(assign=self._selected_control_shader_node)
             cmds.select(clear=True)
+
+            cmds.select(self._control_sphere_list[index][0])
 
     def resize_control_spheres(self, scale):
         self._control_sphere_size = scale

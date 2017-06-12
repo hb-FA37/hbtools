@@ -113,7 +113,7 @@ def draw_debug_spheres(X, Y, Z, use_z=True):
     nodes_Y = draw_debug_spheres_single(X, (0, 1, 0, "VertexSphereColorY"), "GroupMocap", use_z)
     nodes_Z = draw_debug_spheres_single(X, (0, 0, 1, "VertexSphereColorZ"), "GroupApprox", use_z)
 
-    triangle_group = cmds.group(n="GroupTris", em=True)
+    triangle_group = cmds.group(name="GroupTris", empty=True)
     triangle_shader_node = cmds.shadingNode("phong", asShader=True, name="VertexSphereColorTris")
     cmds.setAttr(triangle_shader_node + ".color", 1, 0, 1, type="double3")
 
@@ -138,7 +138,7 @@ def draw_debug_spheres(X, Y, Z, use_z=True):
 def draw_debug_spheres_single(points, shader=(1, 0, 0, "sphere_STND"), group=None, use_z=True):
     shader_node = cmds.shadingNode("phong", asShader=True, name=shader[3])
     cmds.setAttr(shader_node + ".color", shader[0], shader[1], shader[2], type="double3")
-    group_node = cmds.group(n=group, em=True)
+    group_node = cmds.group(name=group, empty=True)
 
     nodes = [shader_node, group_node]
     for i in range(points.shape[0]):
