@@ -91,6 +91,7 @@ global proc int deleteShelfTab37(string $shelfName)
 	//{
 	//	return $returnStatus;
 	//}
+	// We just commented the explicit delete shelf confirmation box.
 
 	// Okay, now we can delete the shelf tab
 

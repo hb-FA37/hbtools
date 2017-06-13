@@ -1,6 +1,6 @@
 from Qt import QtGui
 """
-Add in all used interface setup here, allows us to standardize this.
+Collection of common styles and colors used.
 """
 
 # Color Definitions #
