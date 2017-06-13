@@ -2,6 +2,10 @@ import os
 import moviepy.editor as editor
 from moviepy.editor import VideoFileClip
 
+"""
+Movie file manipulation methods.
+"""
+
 
 def clipit(file_path, start, end, name=None, webm=False, resize=0.3):
     """ Clip to gif. """
@@ -24,7 +28,7 @@ def clipit(file_path, start, end, name=None, webm=False, resize=0.3):
     clip.write_gif(export_path, fps=30)
 
 
-def cutit(movie_file, output_files, time_stamps):
+def cutit(movie_file, output_files, time_stamps, threads=4):
     """ Cut to the given times and write to a single file. """
     sub_clips = []
     clip = VideoFileClip(movie_file)
@@ -37,10 +41,10 @@ def cutit(movie_file, output_files, time_stamps):
         sub_clips.append(sub_clip)
 
     combined_clip = editor.concatenate_videoclips(sub_clips)
-    combined_clip.write_videofile(output_files, preset="slower", threads=12)
+    combined_clip.write_videofile(output_files, preset="slower", threads=threads)
 
 
-def cutit_multi(movie_file, output_path, output_files, time_stamps):
+def cutit_multi(movie_file, output_path, output_files, time_stamps, threads=4):
     """ Cut to the given times and writes each section to a different file. """
     sub_clips = []
     clip = VideoFileClip(movie_file)
@@ -59,30 +63,4 @@ def cutit_multi(movie_file, output_path, output_files, time_stamps):
 
     for index, sub_clip in enumerate(sub_clips):
         output_file = os.path.join(output_path, output_files[index])
-        sub_clip.write_videofile(output_file, preset="medium", threads=12)
-
-
-# Example Usage #
-
-"""
-from Tools37.moviepy37 import clipit
-file_name = r"C:\Users.mp4"
-clipit(file_name, (0, 54, 10), (0, 54, 37), gif_name='symmetra')
-"""
-
-"""
-from Tools37.moviepy37 import cutit
-movie_file = r"C:\Users.mp4"
-output_file = r"C:\Users_clipped.mp4"
-#output_file = r"C:\Users_clipped.webm"
-time_stamps = [(0, 0, 0), (0, 23, 0), (0, 28, 14), (0, 46, 58), (0, 50, 40), (1, 8, 28), (1, 14, 18), (1, 40, 33)]
-cutit(movie_file, output_file, time_stamps)
-
-from Tools37.moviepy37 import cutit_multi
-movie_file = r"C:\Users.mp4"
-output_path = r"C:\Users\Videos"
-output_files = ["a1.mp4", "b1.mp4", "c3.mp4", "d4.mp4"]
-#output_files = ["a1.webm", "b1.webm", "c3.webm", "d4.webm"]
-time_stamps = [(0, 0, 0), (0, 23, 0), (0, 28, 14), (0, 46, 58), (0, 50, 40), (1, 8, 28), (1, 14, 18), (1, 40, 33)]
-cutit_multi(movie_file, output_path, output_files, time_stamps)
-"""
+        sub_clip.write_videofile(output_file, preset="medium", threads=threads)
