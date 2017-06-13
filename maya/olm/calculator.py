@@ -3,7 +3,6 @@ import sys
 import json
 import maya.cmds as cmds
 
-import numpy as np
 import scipy.optimize as sp
 import Tools37.maya.mesh_utils as mu
 import Tools37.maya.maya2numpy as m2n
@@ -24,7 +23,6 @@ class BlendshapeCalculator(object):
         self._neutral_mesh = None
 
         # Calculation data
-        self._filtered_neutral_mesh = None
         self._removed_cols = None
 
         self.reload()
@@ -51,7 +49,7 @@ class BlendshapeCalculator(object):
         if self._debug:
             message = "Neutral Shape: {}".format(self._neutral_mesh.shape)
             sys.stdout.write(message)
-        # TODO; add filtering method to circumvent changing weights.
+        # TODO; add filtering method to circumvent changing weights reloading the entire mesh.
 
     def _filter_blendshape(self):
         a, b = m2n.filter_zero_columns(self._blendshape_mat, debug=True)
@@ -86,8 +84,9 @@ class BlendshapeCalculator(object):
 
     # Calculations #
 
-    def calculate_weights(self, target_points):
-        diff = target_points - self._neutral_mesh
+    def calculate_weights(self, target_points, update=True):
+        # diff = target_points - self._neutral_mesh
+        diff = target_points  # TODO; check if true.
 
         weights, error = sp.nnls(self._filtered_blendshape, diff)
         weights = [wi for wi in weights]
@@ -96,11 +95,12 @@ class BlendshapeCalculator(object):
         for i in range(len(self._removed_cols)):
             weights.insert(self._removed_cols[i] + i, 0)
 
-        mu.set_blendshape_weights(self._blendshape_node, weights)
-
         if self._debug:
             sys.stdout.write("Weights: {} \n".format(weights))
             sys.stdout.write("Error: {} \n".format(error))
+
+        if update:
+            mu.set_blendshape_weights(self._blendshape_node, weights)
 
         return weights
 

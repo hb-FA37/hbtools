@@ -26,11 +26,13 @@ class OlmController(OlmWidget):
         self.signal_add_row.connect(self._add_row)
         self.signal_remove_row.connect(self._delete_row)
 
-        self.signal_import_selection.connect(self._import)
-        self.signal_export_selection.connect(self._export)
-
         self.signal_vertex_sphere_size.connect(self._table_model.resize_vertex_spheres)
         self.signal_control_sphere_size.connect(self._table_model.resize_control_spheres)
+
+        self.signal_calculate.connect(self._table_model.calculate)
+
+        self.signal_import_selection.connect(self._import)
+        self.signal_export_selection.connect(self._export)
 
     # Blendshape #
 
@@ -73,6 +75,7 @@ class OlmController(OlmWidget):
             return
 
         self._table_model.add(vertex_data[1])
+        self._enter_vertex_selection()
 
     def _delete_row(self):
         row = self._table_view.currentIndex().row()
@@ -139,3 +142,5 @@ class OlmController(OlmWidget):
         data = self._table_model.get_json()
         with open(file_name, 'w') as the_file:
             json.dump(data, the_file, sort_keys=True, indent=4, separators=(',', ': '))
+
+# versions = sorted(versions, key=lambda d: StrictVersion(d[_VERSION_DICT_VERSION]))

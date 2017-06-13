@@ -1,8 +1,10 @@
 import collections
 import maya.cmds as cmds
 import maya.mel as mel
+import numpy as np
 
 from Qt import QtCore
+from Tools37.maya.olm.calculator import BlendshapeCalculator
 
 
 class VertexModel(QtCore.QAbstractTableModel):
@@ -20,19 +22,21 @@ class VertexModel(QtCore.QAbstractTableModel):
 
     def __init__(self, parent=None):
         QtCore.QAbstractTableModel.__init__(self, parent)
-        self._blendshape = None             # Blendshape Name
-        self._output_geometry = None        # Output Mesh Name
+        self._blendshape = None                             # Blendshape Name
+        self._output_geometry = None                        # Output Mesh Name
 
         self._vertex_data = []
         self._maya_group = cmds.group(name=self._MAYA_GROUP, empty=True)
 
         self._vertex_sphere_size = self._SPHERE_DEF_SIZE
-        self._vertex_shader_node = None            # Vertex Sphere Shader Node
-        self._selected_vertex_shader_node = None   # Vertex Sphere Selected Shader Node
+        self._vertex_shader_node = None                     # Vertex Sphere Shader Node
+        self._selected_vertex_shader_node = None            # Vertex Sphere Selected Shader Node
 
         self._control_sphere_size = self._SPHERE_DEF_SIZE
-        self._control_shader_node = None            # Vertex Sphere Shader Node
-        self._selected_control_shader_node = None   # Vertex Sphere Selected Shader Node
+        self._control_shader_node = None                    # Vertex Sphere Shader Node
+        self._selected_control_shader_node = None           # Vertex Sphere Selected Shader Node
+
+        self._calculator = None
 
         self._setup_sphere_shaders()
 
@@ -42,17 +46,14 @@ class VertexModel(QtCore.QAbstractTableModel):
             cmds.delete(self._vertex_shader_node)
         except RuntimeError:
             pass
-
         try:
             cmds.delete(self._selected_vertex_shader_node)
         except RuntimeError:
             pass
-
         try:
             cmds.delete(self._control_shader_node)
         except RuntimeError:
             pass
-
         try:
             cmds.delete(self._selected_control_shader_node)
         except RuntimeError:
@@ -77,6 +78,29 @@ class VertexModel(QtCore.QAbstractTableModel):
     def set_scene_objects(self, blendshape, output_geometry):
         self._blendshape = blendshape
         self._output_geometry = output_geometry
+        self._calculator = BlendshapeCalculator(self._blendshape, self._output_geometry, debug=True)
+
+    def calculate(self, use_z=True):
+        if self._calculator is None:
+            return
+
+        if use_z:
+            vertices_points = np.zeros((len(self._vertex_data), 3))
+        else:
+            vertices_points = np.zeros((len(self._vertex_data), 2))
+
+        sorted_vertex_data = sorted(self._vertex_data, key=lambda data: data[self._VD_INDEX])
+        for data, index in enumerate(sorted_vertex_data):
+            sphere = data[self._VD_CONTROL_SPHERE]
+            translation = cmds.getAttr(sphere + ".translate")[0]
+
+            vertices_points[index, 0] = translation[0]
+            vertices_points[index, 1] = translation[1]
+            if use_z:
+                vertices_points[index, 2] = translation[2]
+
+        vertices_points = vertices_points.flatten()
+        self._calculator.calculate_weights(vertices_points)
 
     # Overriden Methods #
 
@@ -144,6 +168,9 @@ class VertexModel(QtCore.QAbstractTableModel):
             except RuntimeError:
                 pass
 
+            if self._calculator is not None:
+                self._calculator.remove_index(self._vertex_data[index][self._VD_INDEX])
+
             del self._vertex_data[index]
 
             self.endRemoveRows()
@@ -170,6 +197,8 @@ class VertexModel(QtCore.QAbstractTableModel):
                 self._VD_CONTROL_SPHERE: control_sphere,
                 self._VD_CONTROL_GROUP: control_group}
         self._vertex_data.append(data)
+        if self._calculator is not None:
+            self._calculator.add_index(vertex_index)
         self.endInsertRows()
 
     def get_vertex_names(self):
