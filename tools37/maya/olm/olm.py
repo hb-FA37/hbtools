@@ -1,8 +1,8 @@
 import maya.cmds as cmds
 
 from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
-from Tools37.maya.olm.olm_controller import OlmController
-from Tools37.maya.cute_utils import get_maya_main_window
+from tools37.maya.olm.olm_controller import OlmController
+from tools37.maya.cute_utils import get_maya_main_window
 
 
 class OlmMixinController(MayaQWidgetDockableMixin, OlmController):

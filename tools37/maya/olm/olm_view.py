@@ -3,9 +3,9 @@ import maya.cmds as cmds
 import maya.mel as mel
 
 from Qt import QtWidgets, QtCore
-from Tools37.cute.widgets import MayaWidget37, AccordionWidget, FloatSliderWidget
-from Tools37.maya import cute_utils as cu
-from Tools37.maya.olm.olm_model import VertexModel
+from tools37.cute.widgets import MayaWidget37, AccordionWidget, FloatSliderWidget
+from tools37.maya import cute_utils as cu
+from tools37.maya.olm.olm_model import VertexModel
 
 
 class OlmWidget(MayaWidget37):

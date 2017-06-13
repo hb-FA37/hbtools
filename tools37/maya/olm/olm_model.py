@@ -4,7 +4,7 @@ import maya.mel as mel
 import numpy as np
 
 from Qt import QtCore
-from Tools37.maya.olm.calculator import BlendshapeCalculator
+from tools37.maya.olm.calculator import BlendshapeCalculator
 
 
 class VertexModel(QtCore.QAbstractTableModel):
