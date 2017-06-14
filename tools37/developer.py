@@ -8,7 +8,7 @@ _RELOAD_EXCEPTION_MODULES = ["os", "sys", "inspect"]
 
 def reload(user_path=None):
     """ Resets the session by deleting all the loaded modules from the given user_path.
-    If no path is provided the entire workspace is will be reloaded.
+    If no path is provided the entire workspace will be reloaded.
 
     Credits for this one go to: Nick Rodgers
     https://medium.com/@nicholasRodgers/sidestepping-pythons-reload-function-without-restarting-maya-2448bab9476e

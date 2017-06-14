@@ -3,7 +3,7 @@ import moviepy.editor as editor
 from moviepy.editor import VideoFileClip
 
 """
-Movie file manipulation methods.
+Small movie file manipulation methods.
 """
 
 
