@@ -75,7 +75,7 @@ def delete_all_shelves():
 
     import tools37.maya.mel as mel37
     mel_file37 = os.path.join(os.path.dirname(mel37.__file__), "deleteShelfTab37.mel")
-    mel.eval('source "{}}"'.format(mel_file37))
+    mel.eval('source "{}"'.format(mel_file37))
 
     for _, shelf in reversed(list(enumerate(shelves))):
         mel.eval('deleteShelfTab37 "{}"'.format(shelf))
