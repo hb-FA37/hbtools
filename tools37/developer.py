@@ -16,6 +16,8 @@ def reload(user_path=None):
     if user_path is None:
         user_path = os.path.dirname(__file__)
         user_path = os.path.abspath(os.path.join(user_path, ("..")))
+    else:
+        user_path = os.path.normpath(user_path)
 
     user_path = user_path.lower()
     print "Reloading everything below: {}".format(user_path)
