@@ -1,8 +1,12 @@
-# Tools37 #
-Collection of small utility methods and tools for use in VFX, mainly Maya.
+# hbtools
+Collection of small utility methods and personal tools for use in VFX, mainly Maya.
 
-## Dependencies ##
-Tools37 requires the following external dependencies:
+# Maya
+The used Maya version when writing these tools was 2016.
+
+# Dependencies
+hbtools requires the following external dependencies:
+
 numpy
 scipy
 moviepy

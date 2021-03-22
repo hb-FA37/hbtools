@@ -4,8 +4,8 @@ import json
 import maya.cmds as cmds
 
 import scipy.optimize as sp
-import tools37.maya.mesh_utils as mu
-import tools37.maya.maya2numpy as m2n
+import hbtools.maya.mesh_utils as mu
+import hbtools.maya.maya2numpy as m2n
 
 
 class BlendshapeCalculator(object):

@@ -15,10 +15,10 @@ def get_deps(*args):
 
 
 setup(
-    name="tools37",
+    name="hbtools",
     version="0.1.0",
-    description="Tools37",
-    url="https://github.com/hb-FA37/Tools37",
+    description="hbtools",
+    url="https://github.com/hb-FA37/hbtools",
     packages=find_packages(os.path.dirname(__file__)),
     install_requires=get_deps("numpy", "scipy", "moviepy", "Qt.py")
 )

@@ -3,12 +3,12 @@ import maya.cmds as cmds
 import maya.mel as mel
 
 from Qt import QtWidgets, QtCore
-from tools37.cute.widgets import MayaWidget37, AccordionWidget, FloatSliderWidget
-from tools37.maya import cute_utils as cu
-from tools37.maya.olm.olm_model import VertexModel
+from hbtools.cute.widgets import MayaWidgetHB, AccordionWidget, FloatSliderWidget
+from hbtools.maya import cute_utils as cu
+from hbtools.maya.olm.olm_model import VertexModel
 
 
-class OlmWidget(MayaWidget37):
+class OlmWidget(MayaWidgetHB):
     _TITLE = "Blendshape Controller"
     _WIDTH = 400
 
