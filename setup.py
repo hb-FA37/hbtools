@@ -20,5 +20,5 @@ setup(
     description="hbtools",
     url="https://github.com/hb-FA37/hbtools",
     packages=find_packages(os.path.dirname(__file__)),
-    install_requires=get_deps("numpy", "scipy", "moviepy", "Qt.py")
+    install_requires=get_deps("numpy", "scipy", "Qt.py")
 )
